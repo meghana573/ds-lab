@@ -1,86 +1,126 @@
-
 #include <stdio.h>
 #include <stdlib.h>
-
-
-typedef struct student {
-	char name[10];
-	int roll_no;
-	int m1,m2,m3;
-	float avg_marks;	
-} STD;
-
-void read(int,STD *);
-void display(int, STD *);
-int calcAvg(int,int,int);
-
-void main(){
-    int n,choice;
-    STD *s, record[30];
-    s = record;
-    
-    while(1){
-        printf("----Student Records----\n");
-        printf("1.Read\n2.Display\n3.Exit\n");
-        printf("Select Option>> ");
-        scanf("%d",&choice);
-        switch(choice){
-            case 1: {
-                printf("Enter number of students >>  ");
-                scanf("%d",&n);
-                read(n,s);
-                break;
-            }
-            case 2: {
-                display(n,s);
-                break;
-            }
-                  
-            default: exit(0);
-        }
-    
-    }
-    
+//N->Number Of Students
+int N,size,i,j;
+//Defining a Structure named Student
+struct student{
+char name[30];
+int reg_no;
+int marks[3];
+float avg;
+};
+//Function Prototypes
+void read(struct student *);
+void disp(struct student *);
+void avg(struct student *);
+//Main Function
+void main()
+{
+//Declaring Pointer to Student Structure
+struct student *st;
+printf("Enter the size:");
+scanf("%d",&size);
+//Dynamically Allocating Memory for array of Structures
+st = (struct student *) malloc(size*sizeof(struct student));
+int choice;
+for(;;)
+{
+printf("Enter Your Choice:\n");
+printf("1.Input\n2.Display\n3.Average\n4.Exit\n");
+scanf("%d",&choice);
+switch(choice)
+{
+case 1 : read(st);
+break;
+case 2 : disp(st);
+break;
+case 3 : avg(st);
+break;
+case 4 : printf("!!THANK YOU!!\n");
+exit(0);
+default : printf("Invalid Choice\n!!Thank You!!\n");
+free(st); st=NULL;
 }
-
-void read(int n,STD *s){
-    printf("   ----Enter Student Details----\n");
-    for(int i=0;i<n;i++){
-    	printf("\t----Student[%d]----\n",i+1);
-    	printf("Name >> ");
-        scanf("%s",&((s+i)->name));
-        printf("Roll number >> ");
-        scanf("%d",&((s+i)->roll_no));
-        printf("Test-1 Marks >> ");
-        scanf("%d",&((s+i)->m1));
-        printf("Test-2 Marks >> ");
-        scanf("%d",&((s+i)->m2));
-        printf("Test-3 Marks >> ");
-        scanf("%d",&((s+i)->m3));
-        ((s+i)->avg_marks) = calcAvg(((s+i)->m1),((s+i)->m1),((s+i)->m1));
-       
-        
-    }
-
-
 }
-void display(int n, STD *s){
-    printf("ID\tNAME\tROLL_NO\tTEST-1\tTEST-2\tTEST-3\tAVG_MARKS\n");
-    for(int i=0;i<n;i++){
-        printf("%d\t%s\t%d\t%d\t%d\t%d\t%.2f\n", i+1,((s+i)->name),((s+i)->roll_no),((s+i)->m1),((s+i)->m2),((s+i)->m3),((s+i)->avg_marks));
-    }
-
 }
-
-int calcAvg(int m1,int m2,int m3){
-	int temp;
-	int arr[3] = {m1,m2,m3};
-	for(int i=0;i<2;i++){
-		if(arr[i]<arr[i+1]){
-			temp = arr[i];
-			arr[i] = arr[i+1];
-			arr[i+1]=temp;
-		}
-	}
-	return ((float)(arr[0]+arr[1])/2);	
+//Function to read Student Details
+void read(struct student *st)
+{
+printf("Enter the number of Students:\n");
+scanf("%d",&N);
+if(N>size)
+{
+printf("insufficient Space\n");
+printf("Creating space by reallocating memory\n");
+st = (struct student *) realloc(st,(N-size)*sizeof(struct student));
+}
+for(i=0;i<N;i++)
+{
+printf("Enter the Name and Reg_no of Student %d\n",i+1);
+scanf("%s%d",(st+i)->name,&(st+i)->reg_no);
+printf("Enter the marks Scored in three tests:\n");
+for(j=0;j<3;j++)
+{
+scanf("%d",&(st+i)->marks[j]);
+}
+}
+}
+//Function to display Student Details
+void disp(struct student *st)
+{
+if(N==0)
+{
+printf("List is Empty!");
+return;
+}
+printf("The details of %d students are:\n",N);
+printf("Reg-No\tName\tTest1\tTest2\tTest3\t\n");
+for(i=0;i<N;i++)
+{
+printf("%d\t%s\t",(st+i)->reg_no,(st+i)->name);
+for(j=0;j<3;j++)
+{
+printf("%d\t",(st+i)->marks[j]);
+}
+printf("\n");
+}
+}
+//Function to calculate average of Students and display
+void avg(struct student *st)
+{
+int k,temp,sum[N];
+//temp : variable used for swapping
+//sum[N] : Array to Store Total marks of N students
+for(i=0;i<N;i++)
+{
+for(j=0;j<3;j++)
+{
+for(k=0;k<3-j-1;k++)
+{
+if((st+i)->marks[k]>(st+i)->marks[k+1])
+{
+temp = (st+i)->marks[k];
+(st+i)->marks[k] = (st+i)->marks[k+1];
+(st+i)->marks[k+1] = temp;
+}
+}
+}
+}
+for(i=0;i<N;i++)
+{
+sum[i] = (st+i)->marks[1] + (st+i)->marks[2];
+(st+i)->avg = (float)sum[i]/2;
+}
+printf("The details of %d students are:\n",N);
+printf("Reg-No\tName\t\tTest1\tTest2\tTest3\tAverage\n");
+for(i=0;i<N;i++)
+{
+printf("%d\t%s\t\t",(st+i)->reg_no,(st+i)->name);
+for(j=0;j<3;j++)
+{
+printf("%d\t",(st+i)->marks[j]);
+}
+printf("%.2f",(st+i)->avg);
+printf("\n");
+}
 }
