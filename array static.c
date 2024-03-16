@@ -43,3 +43,174 @@ printf("Enter the position where the element should be inserted\n");
 scanf("%d", &pos);
 if(pos>=1&&pos<=ne+1)
 {
+for(i=ne;i>=pos;i--)
+{
+x[i]=x[i-1];
+}
+x[i]=ele;
+ne++;
+}
+else
+printf("Invalid position\n");
+}
+//Function to insert an element into Array in order
+void insert_by_order (int x[])
+{
+int i, ele;
+if (ne== size)
+{
+printf("Array is full....:(\n");
+return;
+}
+printf("Enter the element to be inserted...\n");
+scanf("%d",&ele);
+i=ne-1;
+while (i>=0&&x[i]>ele)
+{
+x[i+ 1] = x[i];
+i--;
+}
+x[i+1]=ele;
+ne++;
+}
+//Function to delete an element into Array at specified position
+void delete_by_pos (int x[])
+{
+int i, pos;
+if (ne ==0)
+{
+printf("Array is empty\n");
+return;
+}
+printf ("Enter the postion from where element should be deleted\n");
+scanf("%d", & pos);
+if (pos>= 1 && pos<=ne)
+{
+for(i=pos-1;i<ne-1;i++)
+{
+x[i] = x[i+1];
+}
+ne--;
+}
+else
+  printf("Invalid position\n");
+}
+//Function to delete a key element into Array
+void delete_by_ele (int x[size])
+{
+int i, ele;
+if (ne ==0)
+{
+printf ("Array is empty\n");
+return;
+}
+printf ("Enter the element that should be deleted\n");
+scanf("%d",&ele);
+for(i=0;i<ne&&x[i]!=ele;i++);
+if (i==ne)
+{
+printf ("Element not found in the array list\n");
+return;
+}
+for (;i<ne-1;i++)
+{
+x[i]=x[i+1];
+}
+ne--;
+}
+//Function to search an element in Array
+void search_by_key(int x[])
+{
+int ele,i;
+if(ne==0)
+{
+printf("Array is empty\n");
+return;
+}
+printf("Enter the element that should be searched\n");
+scanf("%d",&ele);
+for(i=0;i<ne;i++)
+{
+if(x[i]==ele)
+printf("Element found at position %d\n",i+1);
+}
+printf("Element not found\n");
+}
+//Function to search an element in Array at specified position
+void search_by_pos(int x[])
+{
+int pos,i;
+if(ne==0)
+{
+printf("Array is empty\n");
+return;
+}
+printf("Enter the position from where element should be searched\n");
+scanf("%d",&pos);
+if(pos>=1&&pos<=ne)
+{
+i=pos-1;
+printf("Element at %d is %d\n",pos,x[i]);
+}
+else
+printf("Invalid position\n");
+}
+//Function to reverse the elements of Array
+void reverse(int x[])
+{
+int t,i;
+if(ne==0)
+{
+printf("Array is empty\n");
+return;
+}
+for(i=0;i<ne/2;i++)
+{
+t=x[i];
+x[i]=x[ne-i-1];
+x[ne-i-1]=t;
+}
+}
+//Main Function
+void main()
+{
+int a[size];//Array declaration
+int choice;
+printf("Menu\n1.Read\n2.Display\n3.Insert by Position\n4.Insert by Order\n5.Delete by Position\n6.Delete
+by Element\n7.Search by Key\n8.Search by Position\n9.Reverse\n10.Exit\n");
+for (;;)
+{
+printf("Enter Your Choice : ");
+scanf("%d",&choice);
+switch (choice)
+{
+case 1: read(a);
+disp(a);
+break;
+case 2: disp(a);
+break;
+case 3: insert_by_pos(a);
+disp(a);
+break;
+case 4: insert_by_order(a);
+disp(a);
+break;
+case 5: delete_by_pos(a);
+disp(a);
+break;
+case 6: delete_by_ele(a);
+disp(a);
+break;
+case 7: search_by_key(a);
+break;
+case 8: search_by_pos(a);
+break;
+case 9: reverse(a);
+disp(a);
+break;
+case 10 : printf("!!THANK YOU!!\n");
+exit(0);
+default: printf("Invalid Choice\n");
+}
+}
+}
